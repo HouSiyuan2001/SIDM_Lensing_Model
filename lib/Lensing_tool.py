@@ -1,6 +1,6 @@
 import jax.numpy as jnp
 # Precompute cosmological distances using Astropy
-# Cosmology, Units: Msun, kpc, Gyr
+# Cosmology, Units: Msun, Mpc/h, Gyr
 import numpy as np
 from astropy import units as u 
 import astropy.constants as const 
@@ -14,8 +14,8 @@ apr =  1.0/np.pi*180.0*3600  # arcsec per rad
 cosmo = FlatwCDM(H0=70.0, Om0=0.3, Ob0=0.05, w0=-1.000000)
 
 z_values = np.linspace(0, 5.0, 10000)
-Dc_values = cosmo.comoving_distance(z_values).value * cosmo.h  # Mpc
-Da_values = cosmo.angular_diameter_distance(z_values).value * cosmo.h  # Mpc
+Dc_values = cosmo.comoving_distance(z_values).value * cosmo.h  # Mpc/h
+Da_values = cosmo.angular_diameter_distance(z_values).value * cosmo.h  # Mpc/h
 
 # Convert z_values and Dc_values to JAX arrays
 z_values_jax = jnp.array(z_values)
@@ -26,7 +26,7 @@ def dv(z):
     ov = 1.0/cosmo.Om(z)-1.0
     res = 18.8*np.pi*np.pi*(1.0+0.4093*ov**0.9052)
     return res
-#计算r200
+#r200
 def rvir_mvir(m,z, stype="vir"):
     if stype=="vir":
         res = (3.0*m/4.0/np.pi/rho_crit(z)/dv(z))**(1.0/3.0)
@@ -56,13 +56,13 @@ def rho_crit(z, densType="crit"):
 
 # 计算共动距离
 def Dc0(z):
-    res = cosmo.comoving_distance(z).value*cosmo.h
+    res = cosmo.comoving_distance(z).value*cosmo.h #Mpc/h
     return res
 
 #两点间的共动距离
 def Dc20(z1,z2):
-    Dcz1 = (cosmo.comoving_distance(z1).value*cosmo.h)
-    Dcz2 = (cosmo.comoving_distance(z2).value*cosmo.h)
+    Dcz1 = (cosmo.comoving_distance(z1).value*cosmo.h) #Mpc/h
+    Dcz2 = (cosmo.comoving_distance(z2).value*cosmo.h) #Mpc/h
     res = Dcz2-Dcz1+1e-8
     return res
 
@@ -75,12 +75,12 @@ def Dc2(z1, z2):
 
 #角直径距离
 def Da0(z):
-    res = cosmo.angular_diameter_distance(z).value*cosmo.h
+    res = cosmo.angular_diameter_distance(z).value*cosmo.h #Mpc/h
     return res
 
 
 def Da20(z1,z2):
-    res = cosmo.angular_diameter_distance_z1z2(z1, z2).value*cosmo.h
+    res = cosmo.angular_diameter_distance_z1z2(z1, z2).value*cosmo.h #Mpc/h
     return res
 
 def Da(z):

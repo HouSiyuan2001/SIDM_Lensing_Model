@@ -37,6 +37,13 @@ pip install scipy
 ```
 ---
 
+# Unit 
+
+The unit system used in this model is the following:
+Distance: Mpc/h 
+Mass: M_sun
+rho
+
 # Contributions
 
 Contributions are welcome! If you have suggestions or improvements for the model, feel free to fork the repository and submit a pull request.
