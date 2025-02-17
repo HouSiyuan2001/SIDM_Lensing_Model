@@ -2,7 +2,7 @@ import jax
 import jax.numpy as jnp
 from jax import jit, vmap
 import numpy as np
-from Lensing_tool import make_c_coor, SigmaCrit,Da,Da2
+from Lensing_tool import make_c_coor, SigmaCrit,Da
 import pickle
 from astropy.cosmology import FlatLambdaCDM
 from astropy import units as u 
@@ -486,9 +486,10 @@ class SIDM_parametric(object):
             arc_delta_y_batch = self.xi2[None, :, :] - pos_y_batch[:, None, None]
             arc_R_batch = jnp.sqrt(arc_delta_x_batch**2 + arc_delta_y_batch**2)  # Angular radius
 
+            vmap_Da = vmap(Da, in_axes=(0))
             # Convert to physical distances
-            delta_x_batch = arc_delta_x_batch / apr * Da(redshift_batch)[:, None, None]
-            delta_y_batch = arc_delta_y_batch / apr * Da(redshift_batch)[:, None, None]
+            delta_x_batch = arc_delta_x_batch / apr * vmap_Da(redshift_batch)[:, None, None]
+            delta_y_batch = arc_delta_y_batch / apr * vmap_Da(redshift_batch)[:, None, None]
             R_batch = jnp.sqrt(delta_x_batch**2 + delta_y_batch**2)  # Physical distance
 
             # Function to compute alpha for a single lens

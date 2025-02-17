@@ -1,7 +1,14 @@
 import jax.numpy as jnp
+from jax.scipy.integrate import trapezoid
+from jax import jit
 # Precompute cosmological distances using Astropy
-# Cosmology, Units: Msun, Mpc/h, Gyr
+# Cosmology, Units: Msun, kpc, Gyr
 import numpy as np
+import sys
+
+sys.path.append("./libs") 
+
+from astropy.table import Table
 from astropy import units as u 
 import astropy.constants as const 
 from astropy.cosmology import FlatwCDM 
@@ -10,23 +17,24 @@ vc = const.c.to(u.km/u.s).value
 G =  const.G.to(u.Mpc/u.solMass *(u.km/u.second)*(u.km/u.second)).value 
 apr =  1.0/np.pi*180.0*3600  # arcsec per rad
 
+H0 = 70.0  # Hubble constant in km/s/Mpc
+Omega_b = 0.05  # Baryon density parameter
+Omega_c = 0.25  # Cold dark matter density parameter
+Omega_m = Omega_b+Omega_c  # Total matter density parameter
+Omega_Lambda = 0.7  # Dark energy density parameter
+Omega_k = 0.0  # Curvature density parameter (set to 0 for a flat universe)
+w0 = -1.0  # Equation of state parameter for dark energy
 
-cosmo = FlatwCDM(H0=70.0, Om0=0.3, Ob0=0.05, w0=-1.000000)
+cosmo = FlatwCDM(H0=H0, Om0=Omega_m, Ob0=Omega_b, w0=w0)
 
-z_values = np.linspace(0, 5.0, 10000)
-Dc_values = cosmo.comoving_distance(z_values).value * cosmo.h  # Mpc/h
-Da_values = cosmo.angular_diameter_distance(z_values).value * cosmo.h  # Mpc/h
 
-# Convert z_values and Dc_values to JAX arrays
-z_values_jax = jnp.array(z_values)
-Dc_values_jax = jnp.array(Dc_values)
-Da_values_jax = jnp.array(Da_values)
+
 #维里过密度
 def dv(z): 
     ov = 1.0/cosmo.Om(z)-1.0
     res = 18.8*np.pi*np.pi*(1.0+0.4093*ov**0.9052)
     return res
-#r200
+#计算r200
 def rvir_mvir(m,z, stype="vir"):
     if stype=="vir":
         res = (3.0*m/4.0/np.pi/rho_crit(z)/dv(z))**(1.0/3.0)
@@ -46,49 +54,102 @@ def SigmaCrit(z1,z2):
 def rho_crit(z, densType="crit"): 
     if densType=="matter":
         # matter density 
-        res = cosmo.Om(z)*cosmo.critical_density(z).to(u.solMass/u.Mpc/u.Mpc/u.Mpc).value/cosmo.h/cosmo.h #M_sun Mpc^-3 *h*h
+        res = cosmo.Om(z)*cosmo.critical_density(z).to(u.solMass/u.Mpc/u.Mpc/u.Mpc).value/cosmo.h/cosmo.h #M_sun Mpc^-3 *h^2
     elif densType=="crit":
         # critical density
-        res = cosmo.critical_density(z).to(u.solMass/u.Mpc/u.Mpc/u.Mpc).value/cosmo.h/cosmo.h #M_sun Mpc^-3 *h*h
+        res = cosmo.critical_density(z).to(u.solMass/u.Mpc/u.Mpc/u.Mpc).value/cosmo.h/cosmo.h #M_sun Mpc^-3 *h^2
     else:
         print("error!!!")
     return res
 
+
 # 计算共动距离
 def Dc0(z):
-    res = cosmo.comoving_distance(z).value*cosmo.h #Mpc/h
+    res = cosmo.comoving_distance(z).value*cosmo.h
     return res
 
 #两点间的共动距离
 def Dc20(z1,z2):
-    Dcz1 = (cosmo.comoving_distance(z1).value*cosmo.h) #Mpc/h
-    Dcz2 = (cosmo.comoving_distance(z2).value*cosmo.h) #Mpc/h
+    Dcz1 = (cosmo.comoving_distance(z1).value*cosmo.h)
+    Dcz2 = (cosmo.comoving_distance(z2).value*cosmo.h)
     res = Dcz2-Dcz1+1e-8
     return res
 
-# Define distance functions using interpolation
-def Dc(z):
-    return jnp.interp(z, z_values_jax, Dc_values_jax)
-
-def Dc2(z1, z2):
-    return Dc(z2) - Dc(z1) + 1e-8
-
 #角直径距离
 def Da0(z):
-    res = cosmo.angular_diameter_distance(z).value*cosmo.h #Mpc/h
+    res = cosmo.angular_diameter_distance(z).value*cosmo.h
     return res
 
 
 def Da20(z1,z2):
-    res = cosmo.angular_diameter_distance_z1z2(z1, z2).value*cosmo.h #Mpc/h
+    res = cosmo.angular_diameter_distance_z1z2(z1, z2).value*cosmo.h
     return res
 
+@jit
+def E_func(z):
+    return jnp.sqrt(Omega_m * (1 + z)**3 + Omega_k * (1 + z)**2 + Omega_Lambda)
+# Function to calculate comoving distance using JAX and trapezoid integration
+@jit
+def Dc(z):
+    # Create an array of redshift values to integrate over
+    z_values = jnp.linspace(0.0, z, 1000000)  # Create a fine grid of z values for integration
+    
+    # Calculate E(z) values for each z
+    E_values = E_func(z_values)
+    
+    # Perform numerical integration using trapezoid rule
+    integral = trapezoid(1.0 / E_values, z_values)
+    
+    # Calculate the comoving distance
+    distance = (vc / H0) * integral  # Return the comoving distance in Mpc
+    return distance*cosmo.h #Mpc/h
+@jit
+def Dc2(z1,z2):
+    Dcz1 = Dc(z1)
+    Dcz2 = Dc(z2)
+    res = Dcz2-Dcz1+1e-8
+    return res
+# Function to calculate angular diameter distance from comoving distance
+@jit
 def Da(z):
-    return jnp.interp(z, z_values_jax, Da_values_jax)
-
+    # Calculate the comoving distance first
+    D_C = Dc(z)
+    
+    # Apply the formula D_A(z) = D_C(z) / (1+z)
+    D_A = D_C / (1 + z)
+    
+    return D_A #Mpc/h
+# Function to calculate angular diameter distance between two redshifts
+@jit
 def Da2(z1, z2):
-    return Da(z2) - Da(z1) + 1e-8
+    # Calculate the comoving distance first
+    D_C = Dc(z2) - Dc(z1)
+    
+    # Apply the formula D_A(z1, z2) = D_C(z1, z2) / (1+z2)
+    D_A = D_C / (1 + z2)
+    
+    return D_A #Mpc/h
 
+# z_values = np.linspace(0, 5.0, 10000)
+# Dc_values = cosmo.comoving_distance(z_values).value * cosmo.h  # Mpc/h
+# Da_values = cosmo.angular_diameter_distance(z_values).value * cosmo.h  # Mpc/h
+
+# # Convert z_values and Dc_values to JAX arrays
+# z_values_jax = jnp.array(z_values)
+# Dc_values_jax = jnp.array(Dc_values)
+# Da_values_jax = jnp.array(Da_values)
+
+# Define distance functions using interpolation
+# def Dc(z):
+#     return jnp.interp(z, z_values_jax, Dc_values_jax)
+
+# def Dc2(z1, z2):
+#     return Dc(z2) - Dc(z1) + 1e-8
+# def Da(z):
+#     return jnp.interp(z, z_values_jax, Da_values_jax)
+
+# def Da2(z1, z2):
+#     return Da(z2) - Da(z1) + 1e-8
 
 zs0 = 10.0
 def rev_dangle(zl_lens, zs, al1_ref, al2_ref):
