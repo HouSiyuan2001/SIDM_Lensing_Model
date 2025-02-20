@@ -41,9 +41,9 @@ pip install scipy
 
 # Units: 
 
-Mass: $M_\odot/h$  
-$r_{s,0}$:  $Mpc/h$   
-$\rho_{s,0}$:  $h^2 M_\odot/Mpc^3$  
+Mass: $\rm M_\odot/h$  
+$r_{s,0}$:  $\rm Mpc/h$   
+$\rho_{s,0}$:  $\rm h^2 M_\odot/Mpc^3$  
 
 ---
 
