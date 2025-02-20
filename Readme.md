@@ -9,20 +9,18 @@ This code implements a **parametric model for gravitational lensing** by self-in
   - `example/Lensing.ipynb`: This Jupyter notebook provides instructions for using the parametric lensing model, along with examples of lensing-related maps, critical curves, and caustics.
 
 - **lib**
-  - `Lensing_tool.py`: Contains utility functions for additional lensing-related calculations, such as finding critical curves and other lensing features.
-  - `SIDM_density_fluid.py`: Implements the density profile of SIDM halos.
-  - `SIDM_Parametric_Model_jax.py`:  The core parametric model for gravitational lensing by SIDM halos.
-
-- **Processed_data**: This directory contains data from fluid simulations used by the model for running simulations and analyses.
-
+  - `lib/Lensing_tool.py`: Contains utility functions for additional lensing-related calculations, such as finding critical curves and other lensing features.
+  - `lib/SIDM_density_fluid.py`: Implements the density profile of SIDM halos.
+  - `lib/SIDM_Parametric_Model_jax.py`:  The core parametric model for gravitational lensing by SIDM halos.
+  - `lib/Processed_data`: This directory contains data for comparisons. 
 
 ---
 
-# Using Package
+# Requirements
 
-- **JAX web**: https://jax.readthedocs.io/en/latest/
+- **Setting up JAX**: https://jax.readthedocs.io/en/latest/
 
-Some necessary packages (possibly not complete):
+- Packages:
 
 ```shell
 pip install jupyter
@@ -37,23 +35,23 @@ pip install scipy
 ```
 ---
 
-# Unit 
-
-The unit system used in this model is the following:
+# Units: 
 
 Mass: $M_\odot/h$  
 $r_{s,0}$:  $Mpc/h$   
 $\rho_{s,0}$:  $h^2 M_\odot/Mpc^3$  
 
-# Contributions
-
-Contributions are welcome! If you have suggestions or improvements for the model, feel free to fork the repository and submit a pull request.
-
 ---
 
-# Citation
+# References
 
-If you use this model in your research, please cite it appropriately. You may use the following citation format:
+Our code is free to copy and modify. If you find it useful, please cite the following papers. For any questions or comments, feel free to contact [syhou_at_pmo.ac.cn].
 
-[1] S. Hou, D. Yang, N. Li, and G. Li, A Universal Analytic Model for Gravitational Lensing by Self-Interacting Dark Matter Halos, arXiv:25???.?????.  
+[1] S. Hou, D. Yang, N. Li, and G. Li, A Universal Analytic Model for Gravitational Lensing by Self-Interacting Dark Matter Halos, arXiv:25XX.XXXXX.  
 [2] D. Yang, E. O. Nadler, H.-B. Yu, and Y.-M. Zhong, A Parametric Model for Self-Interacting Dark Matter Halos, J. Cosmol. Astropart. Phys. 2024, 032 (2024).  
+
+# Other related works
+
+For more information on incorporating accretion history and baryon effects, please refer to the [GitHub page here](https://github.com/DanengYang/parametricSIDM).
+
+
