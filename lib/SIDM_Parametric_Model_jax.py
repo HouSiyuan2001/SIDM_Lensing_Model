@@ -9,7 +9,7 @@ from astropy import units as u
 import astropy.constants as const 
 from SIDM_density_fluid import Numerical_2d_density
 
-# Cosmology, Units: Msun, Mpc/h, Gyr
+# Cosmology, Units: Msun/h, Mpc/h, Gyr
 Omegam0 = 0.3157
 Omegab0 = 0.04936
 sigma8 = 0.8116
