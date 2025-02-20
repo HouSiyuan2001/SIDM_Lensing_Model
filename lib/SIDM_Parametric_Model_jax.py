@@ -29,7 +29,7 @@ class SIDM_parametric_simple(object):
         current_rhos = self.fitted_rhos(current_tr)
         current_rs = self.fitted_rs(current_tr)
         current_rc = self.fitted_rc(current_tr)
-        current_a = self.fitted_alpha(current_tr)
+        current_a = self.fitted_beta(current_tr)
         current_c = self.fitted_gamma(current_tr)
         Density = self.funrho(r/rss, current_rhos, current_rs, current_rc, current_a, current_c) * rhoss
         return Density
@@ -40,7 +40,7 @@ class SIDM_parametric_simple(object):
         current_rhos = self.fitted_rhos(trb)
         current_rs = self.fitted_rs(trb)
         current_rc = self.fitted_rc(trb) * Ft**2
-        current_a = self.fitted_alpha(trb)
+        current_a = self.fitted_beta(trb)
         current_c = self.fitted_gamma(trb)
         Density = self.funrho(r/rss, current_rhos, current_rs, current_rc, current_a, current_c) * rhoss
         return Density
@@ -64,7 +64,7 @@ class SIDM_parametric_simple(object):
         a, b, c, d, g, h, i = 2.79650252, -0.02224725, -2.68712924, 3.42099585, 0.06969549, 2.02747497, 0.03140837
         return (1 + a * pow(x, 0.6) + c * x**1 + d * x**3 + g * x**10 + h * x**17 + i * x**80 + b * x**83)
 
-    def fitted_alpha(self, x):
+    def fitted_beta(self, x):
         '''Calculate the fitted alpha coefficient.'''
         a, b, c, d, g, h, i = -0.41711945, 0.29619283, 0.20237198, 0.93450782, -2.10957393, 2.00795074, -0.57618027
         return (1 + a * pow(x, 0.6) + c * x**2 + d * x**13 + g * x**26 + h * x**39 + i * x**66 + b * x**71)
@@ -176,7 +176,7 @@ def fited_c(x):
     a, b, c, d, g, h, i, j = 1.79309631e+00,  5.10780441e-01, -1.43007683e+00,  1.39244251e+00, -7.85787233e-01,  1.60384916e-01,  3.14558126e-02,  7.14758319e-04
     return a + b*x**0.1 + c*x**0.2 + d*x**0.4 + g*x**0.9+h*x**2+i*x**12+j*x**67
 
-def fited_d(x):
+def fited_p(x):
     a, b, c, d, g, h, i, j = 6.94266549, 4.96669252, -12.52779021, 7.54562512, 3.21238241, 2.86297753, -0.32646638, 0.30926922
     return a + b*x**0.2 + c*x**0.3 + d*x**0.8 + g*x**2+h*x**11+i*x**22+j*x**37
 
@@ -189,11 +189,10 @@ def get_para_scalar(trx):
     a = fited_a(trx)
     b = fited_b(trx)
     c = fited_c(trx)
-    d = fited_d(trx)
+    d = fited_p(trx)
     e = fited_s(trx)
     return a, b, c, d, e
 
-# 向量化
 get_para = vmap(get_para_scalar)
 
 class SIDM_parametric(object):

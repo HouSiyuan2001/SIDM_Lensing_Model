@@ -29,66 +29,66 @@ cosmo = FlatwCDM(H0=H0, Om0=Omega_m, Ob0=Omega_b, w0=w0)
 
 
 
-#维里过密度
+# Virial overdensity
 def dv(z): 
     ov = 1.0/cosmo.Om(z)-1.0
     res = 18.8*np.pi*np.pi*(1.0+0.4093*ov**0.9052)
     return res
-#计算r200
-def rvir_mvir(m,z, stype="vir"):
-    if stype=="vir":
-        res = (3.0*m/4.0/np.pi/rho_crit(z)/dv(z))**(1.0/3.0)
-    elif stype=="200":
-        res = (3.0*m/4.0/np.pi/rho_crit(z)/200.0)**(1.0/3.0)
+
+# Calculate r200
+def rvir_mvir(m, z, stype="vir"):
+    if stype == "vir":
+        res = (3.0 * m / 4.0 / np.pi / rho_crit(z) / dv(z))**(1.0 / 3.0)
+    elif stype == "200":
+        res = (3.0 * m / 4.0 / np.pi / rho_crit(z) / 200.0)**(1.0 / 3.0)
     else:
         print("wrong stype!!!")
     return res
 
-def SigmaCrit(z1,z2):
+def SigmaCrit(z1, z2):
     '''
         Critical surface density for the case of lens plane at z1 and source plane at z2.
     '''
-    res = (vc*vc/4.0/jnp.pi/G*Dc(z2)/(Dc(z1)/(1.0+z1))/Dc2(z1,z2))
+    res = (vc * vc / 4.0 / jnp.pi / G * Dc(z2) / (Dc(z1) / (1.0 + z1)) / Dc2(z1, z2))
     return res
 
 def rho_crit(z, densType="crit"): 
-    if densType=="matter":
-        # matter density 
-        res = cosmo.Om(z)*cosmo.critical_density(z).to(u.solMass/u.Mpc/u.Mpc/u.Mpc).value/cosmo.h/cosmo.h #M_sun Mpc^-3 *h^2
-    elif densType=="crit":
-        # critical density
-        res = cosmo.critical_density(z).to(u.solMass/u.Mpc/u.Mpc/u.Mpc).value/cosmo.h/cosmo.h #M_sun Mpc^-3 *h^2
+    if densType == "matter":
+        # Matter density 
+        res = cosmo.Om(z) * cosmo.critical_density(z).to(u.solMass / u.Mpc / u.Mpc / u.Mpc).value / cosmo.h / cosmo.h # M_sun Mpc^-3 *h^2
+    elif densType == "crit":
+        # Critical density
+        res = cosmo.critical_density(z).to(u.solMass / u.Mpc / u.Mpc / u.Mpc).value / cosmo.h / cosmo.h # M_sun Mpc^-3 *h^2
     else:
         print("error!!!")
     return res
 
-
-# 计算共动距离
+# Calculate comoving distance
 def Dc0(z):
-    res = cosmo.comoving_distance(z).value*cosmo.h
+    res = cosmo.comoving_distance(z).value * cosmo.h
     return res
 
-#两点间的共动距离
-def Dc20(z1,z2):
-    Dcz1 = (cosmo.comoving_distance(z1).value*cosmo.h)
-    Dcz2 = (cosmo.comoving_distance(z2).value*cosmo.h)
-    res = Dcz2-Dcz1+1e-8
+# Comoving distance between two points
+def Dc20(z1, z2):
+    Dcz1 = (cosmo.comoving_distance(z1).value * cosmo.h)
+    Dcz2 = (cosmo.comoving_distance(z2).value * cosmo.h)
+    res = Dcz2 - Dcz1 + 1e-8
     return res
 
-#角直径距离
+# Angular diameter distance
 def Da0(z):
-    res = cosmo.angular_diameter_distance(z).value*cosmo.h
+    res = cosmo.angular_diameter_distance(z).value * cosmo.h
     return res
 
-
-def Da20(z1,z2):
-    res = cosmo.angular_diameter_distance_z1z2(z1, z2).value*cosmo.h
+def Da20(z1, z2):
+    res = cosmo.angular_diameter_distance_z1z2(z1, z2).value * cosmo.h
     return res
 
+# Function to calculate comoving distance using JAX and trapezoid integration
 @jit
 def E_func(z):
     return jnp.sqrt(Omega_m * (1 + z)**3 + Omega_k * (1 + z)**2 + Omega_Lambda)
-# Function to calculate comoving distance using JAX and trapezoid integration
+
 @jit
 def Dc(z):
     # Create an array of redshift values to integrate over
@@ -130,38 +130,6 @@ def Da2(z1, z2):
     
     return D_A #Mpc/h
 
-# z_values = np.linspace(0, 5.0, 10000)
-# Dc_values = cosmo.comoving_distance(z_values).value * cosmo.h  # Mpc/h
-# Da_values = cosmo.angular_diameter_distance(z_values).value * cosmo.h  # Mpc/h
-
-# # Convert z_values and Dc_values to JAX arrays
-# z_values_jax = jnp.array(z_values)
-# Dc_values_jax = jnp.array(Dc_values)
-# Da_values_jax = jnp.array(Da_values)
-
-# Define distance functions using interpolation
-# def Dc(z):
-#     return jnp.interp(z, z_values_jax, Dc_values_jax)
-
-# def Dc2(z1, z2):
-#     return Dc(z2) - Dc(z1) + 1e-8
-# def Da(z):
-#     return jnp.interp(z, z_values_jax, Da_values_jax)
-
-# def Da2(z1, z2):
-#     return Da(z2) - Da(z1) + 1e-8
-
-zs0 = 10.0
-def rev_dangle(zl_lens, zs, al1_ref, al2_ref):
-    rescale = Da(zs0)/Da2(zl_lens, zs0) * Da2(zl_lens, zs) / Da(zs)
-    al1_zs = al1_ref * rescale
-    al2_zs = al2_ref * rescale
-    return al1_zs, al2_zs
-
-def rev_potential(zl_lens, zs, pot):
-    rescale = Da(zs0)/Da2(zl_lens, zs0) * Da2(zl_lens, zs) / Da(zs)
-    pot_zs =pot * rescale
-    return pot_zs
 def alphas_to_mu(alpha1_in, alpha2_in, dsx_arc, xi1, xi2):
     al11_tmp, al12_tmp = jnp.gradient(alpha1_in, dsx_arc)
     al21_tmp, al22_tmp = jnp.gradient(alpha2_in, dsx_arc)
@@ -174,7 +142,6 @@ def alphas_to_mu(alpha1_in, alpha2_in, dsx_arc, xi1, xi2):
     y1_out = xi1-alpha1_in
     y2_out = xi2-alpha2_in
     return y1_out, y2_out, mu_out, kappa, gamma1, gamma2
-
 
 
 def Mass_c_to_rhos_rs(Mvir, cvir,zlens):
@@ -210,49 +177,49 @@ def arcsec_to_Rad(arcsec):
 
 def zero_padding(in_arr, Nx, Ny):
     out = np.zeros((2*Nx, 2*Ny), dtype=in_arr.dtype)
-    out[:Nx,:Ny] = in_arr
+    out[:Nx, :Ny] = in_arr
     return out
 
 def corner_matrix(in_arr, Nx, Ny):
-    return in_arr[:Nx,:Ny]
+    return in_arr[:Nx, :Ny]
 
 def roll_a_matrix(in_arr, roll_nx1, roll_nx2):
-    # 使用 numpy.roll 进行平移
+    # Use numpy.roll to shift the array
     return np.roll(np.roll(in_arr, roll_nx1, axis=0), roll_nx2, axis=1)
 
 def kernel_alphas_iso_I(Ncc, dsx):
-    # I (原始)边界条件的 kernel
+    # Kernel with I (original) boundary conditions
     alpha1_iso = np.zeros((Ncc, Ncc))
     alpha2_iso = np.zeros((Ncc, Ncc))
     half = Ncc // 2
     for i in range(Ncc):
         for j in range(Ncc):
             if i <= half and j <= half:
-                x = (i)*dsx+0.5*dsx
-                y = (j)*dsx+0.5*dsx
-                r = np.sqrt(x*x+y*y)
+                x = (i)*dsx + 0.5*dsx
+                y = (j)*dsx + 0.5*dsx
+                r = np.sqrt(x*x + y*y)
                 if r > dsx*(Ncc/2.0):
-                    alpha1_iso[i,j] = 0.0
-                    alpha2_iso[i,j] = 0.0
+                    alpha1_iso[i, j] = 0.0
+                    alpha2_iso[i, j] = 0.0
                 else:
                     val = 1.0/(np.pi*r*r)
-                    alpha1_iso[i,j] = x*val
-                    alpha2_iso[i,j] = y*val
+                    alpha1_iso[i, j] = x*val
+                    alpha2_iso[i, j] = y*val
             else:
-                # 利用对称性填充
+                # Fill using symmetry
                 if i <= half and j > half:
-                    alpha1_iso[i,j] =  alpha1_iso[i, Ncc-j]
-                    alpha2_iso[i,j] = -alpha2_iso[i, Ncc-j]
+                    alpha1_iso[i, j] =  alpha1_iso[i, Ncc-j]
+                    alpha2_iso[i, j] = -alpha2_iso[i, Ncc-j]
                 if i > half and j <= half:
-                    alpha1_iso[i,j] = -alpha1_iso[Ncc-i, j]
-                    alpha2_iso[i,j] =  alpha2_iso[Ncc-i, j]
+                    alpha1_iso[i, j] = -alpha1_iso[Ncc-i, j]
+                    alpha2_iso[i, j] =  alpha2_iso[Ncc-i, j]
                 if i > half and j > half:
-                    alpha1_iso[i,j] = -alpha1_iso[Ncc-i, Ncc-j]
-                    alpha2_iso[i,j] = -alpha2_iso[Ncc-i, Ncc-j]
+                    alpha1_iso[i, j] = -alpha1_iso[Ncc-i, Ncc-j]
+                    alpha2_iso[i, j] = -alpha2_iso[Ncc-i, Ncc-j]
     return alpha1_iso, alpha2_iso
 
 def kernel_alphas_iso_P(Ncc, dsx):
-    # P (周期)边界条件的 kernel
+    # Kernel with P (periodic) boundary conditions
     alpha1_iso = np.zeros((Ncc, Ncc))
     alpha2_iso = np.zeros((Ncc, Ncc))
     for i in range(Ncc):
@@ -261,11 +228,11 @@ def kernel_alphas_iso_P(Ncc, dsx):
             y = ((j - Ncc//2) + 0.5)*dsx
             r = np.sqrt(x*x + y*y)
             if r > dsx*(Ncc/2.0):
-                alpha1_iso[i,j] = 0.0
-                alpha2_iso[i,j] = 0.0
+                alpha1_iso[i, j] = 0.0
+                alpha2_iso[i, j] = 0.0
             else:
-                alpha1_iso[i,j] = x/(np.pi*r*r)
-                alpha2_iso[i,j] = y/(np.pi*r*r)
+                alpha1_iso[i, j] = x/(np.pi*r*r)
+                alpha2_iso[i, j] = y/(np.pi*r*r)
     return alpha1_iso, alpha2_iso
 
 def convolve_fft(in1, in2, dx, dy):
@@ -281,27 +248,27 @@ def call_kappa_to_alphas(Kappa, Bsz, Ncc, boundary_type='I'):
     dsx = Bsz / Ncc
 
     if boundary_type == 'I':
-        # 使用I类型kernel
+        # Use I-type kernel
         alpha1_iso, alpha2_iso = kernel_alphas_iso_I(2*Ncc, dsx)
-        # 零填充
+        # Zero padding
         kappa = zero_padding(Kappa, Ncc, Ncc)
-        # 卷积
+        # Convolution
         alpha1_tmp = convolve_fft(kappa, alpha1_iso, dsx, dsx)
         alpha2_tmp = convolve_fft(kappa, alpha2_iso, dsx, dsx)
         alpha1 = corner_matrix(alpha1_tmp, Ncc, Ncc)
         alpha2 = corner_matrix(alpha2_tmp, Ncc, Ncc)
     
     elif boundary_type == 'P':
-        # 使用P类型kernel (不需要zero padding,与C代码保持一致)
+        # Use P-type kernel (no zero padding needed, consistent with C code)
         alpha1_iso, alpha2_iso = kernel_alphas_iso_P(Ncc, dsx)
-        # 直接对Kappa做卷积
+        # Directly convolve with Kappa
         alpha1_tmp = np.zeros_like(Kappa)
         alpha2_tmp = np.zeros_like(Kappa)
 
         alpha1_tmp = convolve_fft(Kappa, alpha1_iso, dsx, dsx)
         alpha2_tmp = convolve_fft(Kappa, alpha2_iso, dsx, dsx)
 
-        # roll处理
+        # Roll processing
         alpha1 = roll_a_matrix(alpha1_tmp, Ncc//2, Ncc//2)
         alpha2 = roll_a_matrix(alpha2_tmp, Ncc//2, Ncc//2)
     
