@@ -24,6 +24,8 @@ This code implements a **parametric model for gravitational lensing** by self-in
 
 # Requirements
 
+This code uses **JAX**, a library for high-performance numerical computing, designed to accelerate calculations with automatic differentiation and GPU/TPU support. It allows for fast and scalable numerical operations in scientific computing.
+
 - **Setting up JAX**: https://jax.readthedocs.io/en/latest/
 
 - Packages:
