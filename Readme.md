@@ -1,17 +1,17 @@
-# Lensing Parametric Model
-
-This project provides a **parametric model for gravitational lensing** designed to study lensing phenomena in the context of self-interacting dark matter (SIDM). The code calculates several key lensing parameters, including convergence (κ), lensing potential, deflection angle, and critical curves. This model helps users better understand the gravitational lensing phenomena caused by self-interacting dark matter.
+# A Universal Analytic Model for Gravitational Lensing by Self-Interacting Dark Matter Halos
+[![arXiv](https://img.shields.io/badge/arXiv-25XX.XXXXX%20-green.svg)](https://arxiv.org/abs/25XX.XXXXX)
+This code implements a **parametric model for gravitational lensing** by self-interacting dark matter (SIDM) halos. It extends the parametric framework introduced in arXiv:2305.16176 (JCAP), enabling more comprehensive lensing studies. The code allows for the analytic calculation of the lensing potential, deflection angle, and convergence (κ). It includes example scripts to compute critical curves and caustics for SIDM halos, both in isolation and within a main halo, and track their evolution through the gravothermal phase. For broader applicability, we also provide efficient FFT-based tools for numerically computing lensing signatures.
 
 # File Structure
 
 - **example**
-  - `Accuracy.ipynb`: This Jupyter notebook demonstrates the accuracy of the model, including two main components: the density part and the lensing model part.
-  - `Lensing.ipynb`: This Jupyter notebook provides a detailed guide on how to use the parametric lensing model, calculate the parameters, and generate plots related to lensing phenomena.
+  - `example/Accuracy.ipynb`: This Jupyter notebook computes the density and lensing-related profiles, comparing the model's predicted results with those obtained numerically.
+  - `example/Lensing.ipynb`: This Jupyter notebook provides instructions for using the parametric lensing model, along with examples of lensing-related maps, critical curves, and caustics.
 
 - **lib**
-  - `Lensing_tool.py`: Contains utility functions to perform additional lensing-related calculations, such as finding critical curves and other lensing features.
-  - `SIDM_density_fluid.py`: Implements the density profile related to self-interacting dark matter for the lensing model.
-  - `SIDM_Parametric_Model_jax.py`: The core parametric model for gravitational lensing due to self-interacting dark matter.
+  - `Lensing_tool.py`: Contains utility functions for additional lensing-related calculations, such as finding critical curves and other lensing features.
+  - `SIDM_density_fluid.py`: Implements the density profile of SIDM halos.
+  - `SIDM_Parametric_Model_jax.py`:  The core parametric model for gravitational lensing by SIDM halos.
 
 - **Processed_data**: This directory contains data from fluid simulations used by the model for running simulations and analyses.
 
@@ -54,6 +54,4 @@ Contributions are welcome! If you have suggestions or improvements for the model
 If you use this model in your research, please cite it appropriately. You may use the following citation format:
 
 [1] S. Hou, D. Yang, N. Li, and G. Li, A Universal Analytic Model for Gravitational Lensing by Self-Interacting Dark Matter Halos, arXiv:25???.?????.  
-[2] D. Yang, Exploring Self-Interacting Dark Matter Halos with Diverse Baryonic Distributions: A Parametric Approach, arXiv:2405.03787.  
-[3] D. Yang, E. O. Nadler, H.-B. Yu, and Y.-M. Zhong, A Parametric Model for Self-Interacting Dark Matter Halos, J. Cosmol. Astropart. Phys. 2024, 032 (2024).  
-[4] D. Yang and H.-B. Yu, Self-Interacting Dark Matter and Small-Scale Gravitational Lenses in Galaxy Clusters, Phys. Rev. D 104, 103031 (2021).  
+[2] D. Yang, E. O. Nadler, H.-B. Yu, and Y.-M. Zhong, A Parametric Model for Self-Interacting Dark Matter Halos, J. Cosmol. Astropart. Phys. 2024, 032 (2024).  
