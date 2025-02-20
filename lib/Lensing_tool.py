@@ -2,7 +2,7 @@ import jax.numpy as jnp
 from jax.scipy.integrate import trapezoid
 from jax import jit
 
-# Cosmology, Units: Msun, kpc, Gyr
+
 import numpy as np
 import sys
 
