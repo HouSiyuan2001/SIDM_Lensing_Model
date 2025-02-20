@@ -57,14 +57,14 @@ Our code is free to copy and modify. If you find it useful, please cite the foll
 
 [1] S. Hou, D. Yang, N. Li, and G. Li, A Universal Analytic Model for Gravitational Lensing by Self-Interacting Dark Matter Halos, arXiv:25XX.XXXXX. 
 
-[2] D. Yang, E. O. Nadler, H.-B. Yu, and Y.-M. Zhong, A Parametric Model for Self-Interacting Dark Matter Halos, J. Cosmol. Astropart. Phys. 2024, 032 (2024).  
+[2] D. Yang, E. O. Nadler, H.-B. Yu, and Y.-M. Zhong, A Parametric Model for Self-Interacting Dark Matter Halos, [J. Cosmol. Astropart. Phys. 2024, 032 (2024)](https://iopscience.iop.org/article/10.1088/1475-7516/2024/02/032).  
 
 # Other related works
 
 For more information on incorporating accretion history and baryon effects, please refer to the [GitHub page here](https://github.com/DanengYang/parametricSIDM).
 
-[1] D. Yang, Exploring Self-Interacting Dark Matter Halos with Diverse Baryonic Distributions: A Parametric Approach, [Phys. Rev. D 110, 103044 (2024)](https://arxiv.org/abs/2405.03787)
+[1] D. Yang, Exploring Self-Interacting Dark Matter Halos with Diverse Baryonic Distributions: A Parametric Approach, [Phys. Rev. D 110, 103044 (2024)](https://doi.org/10.1103/PhysRevD.110.103044)
 
-[2] D. Yang, E. O. Nadler, H.-B. Yu, Testing the parametric model for self-interacting dark matter using matched halos in cosmological simulations, [Phys. Dark Universe 47, 101807 (2025)](https://arxiv.org/abs/2406.10753)
+[2] D. Yang, E. O. Nadler, H.-B. Yu, Testing the parametric model for self-interacting dark matter using matched halos in cosmological simulations, [Phys. Dark Universe 47, 101807 (2025)](https://doi.org/10.1016/j.dark.2025.101807)
 
-[3] D. Yang, H.-B. Yu, Self-Interacting Dark Matter and Small-Scale Gravitational Lenses in Galaxy Clusters, [Phys. Rev. D 104, 103031](https://arxiv.org/abs/2102.02375)
+[3] D. Yang, H.-B. Yu, Self-Interacting Dark Matter and Small-Scale Gravitational Lenses in Galaxy Clusters, [Phys. Rev. D 104, 103031](https://doi.org/10.1103/PhysRevD.104.103031)
