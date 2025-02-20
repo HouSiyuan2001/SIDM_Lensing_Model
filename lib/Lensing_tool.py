@@ -1,7 +1,7 @@
 import jax.numpy as jnp
 from jax.scipy.integrate import trapezoid
 from jax import jit
-# Precompute cosmological distances using Astropy
+
 # Cosmology, Units: Msun, kpc, Gyr
 import numpy as np
 import sys
@@ -63,6 +63,7 @@ def rho_crit(z, densType="crit"):
         print("error!!!")
     return res
 
+# Precompute cosmological distances using Astropy
 # Calculate comoving distance
 def Dc0(z):
     res = cosmo.comoving_distance(z).value * cosmo.h
