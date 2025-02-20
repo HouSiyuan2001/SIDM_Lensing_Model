@@ -6,7 +6,7 @@ This code implements a **parametric model for gravitational lensing** by self-in
 
 - **Authors**: Siyuan Hou, Daneng Yang, Nan Li, Guoliang Li
 
-# File Structure
+# File structure
 
 - **example**
   - `example/Accuracy.ipynb`: This Jupyter notebook computes the density and lensing-related profiles, comparing the model's predicted results with those obtained numerically.
