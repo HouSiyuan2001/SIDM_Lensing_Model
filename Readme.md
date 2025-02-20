@@ -40,8 +40,10 @@ pip install scipy
 # Unit 
 
 The unit system used in this model is the following:
-Distance: Mpc/h 
-Mass: M_sun
+
+Mass: $M_\odot/h$  
+$r_{s,0}$:  $Mpc/h$   
+$\rho_{s,0}$:  $h^2 M_\odot/Mpc^3$  
 
 # Contributions
 
