@@ -1,6 +1,6 @@
 # A Universal Analytic Model for Gravitational Lensing by Self-Interacting Dark Matter Halos
 
-[![arXiv](https://img.shields.io/badge/arXiv-25XX.XXXXX%20-green.svg)](https://arxiv.org/abs/25XX.XXXXX)
+[![arXiv](https://img.shields.io/badge/arXiv-2502.14964%20-green.svg)](https://arxiv.org/abs/25XX.XXXXX)
 
 This code implements a **parametric model for gravitational lensing** by self-interacting dark matter (SIDM) halos. It extends the parametric framework introduced in arXiv:2305.16176 (JCAP), enabling more comprehensive lensing studies. The code allows for the analytic calculation of the lensing potential, deflection angle, and convergence (κ). It includes example scripts to compute critical curves and caustics for SIDM halos, both in isolation and within a main halo, and track their evolution through the gravothermal phase. For broader applicability, we also provide efficient FFT-based tools for numerically computing lensing signatures.
 
@@ -55,7 +55,7 @@ $\rho_{s,0}$:  $\rm h^2 M_\odot/Mpc^3$
 
 Our code is free to copy and modify. If you find it useful, please cite the following papers. For any questions or comments, feel free to contact [syhou_at_pmo.ac.cn].
 
-[1] S. Hou, D. Yang, N. Li, and G. Li, A Universal Analytic Model for Gravitational Lensing by Self-Interacting Dark Matter Halos, arXiv:25XX.XXXXX. 
+[1] S. Hou, D. Yang, N. Li, and G. Li, A Universal Analytic Model for Gravitational Lensing by Self-Interacting Dark Matter Halos, [arXiv:2502.14964](https://arxiv.org/abs/2502.14964). 
 
 [2] D. Yang, E. O. Nadler, H.-B. Yu, and Y.-M. Zhong, A Parametric Model for Self-Interacting Dark Matter Halos, [J. Cosmol. Astropart. Phys. 2024, 032 (2024)](https://iopscience.iop.org/article/10.1088/1475-7516/2024/02/032).  
 
