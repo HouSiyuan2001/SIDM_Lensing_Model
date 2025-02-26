@@ -1,6 +1,6 @@
 # A Universal Analytic Model for Gravitational Lensing by Self-Interacting Dark Matter Halos
 
-[![arXiv](https://img.shields.io/badge/arXiv-2502.14964%20-green.svg)](https://arxiv.org/abs/25XX.XXXXX)
+[![arXiv](https://img.shields.io/badge/arXiv-2502.14964%20-green.svg)](https://arxiv.org/abs/2502.14964)
 
 This code implements a **parametric model for gravitational lensing** by self-interacting dark matter (SIDM) halos. It extends the parametric framework introduced in arXiv:2305.16176 (JCAP), enabling more comprehensive lensing studies. The code allows for the analytic calculation of the lensing potential, deflection angle, and convergence (κ). It includes example scripts to compute critical curves and caustics for SIDM halos, both in isolation and within a main halo, and track their evolution through the gravothermal phase. For broader applicability, we also provide efficient FFT-based tools for numerically computing lensing signatures.
 
