@@ -184,14 +184,13 @@ def fited_s(x):
     a, b, c, d, g, h, i, j = 1.82544721e+00, -5.99111491e-01, 8.44850940e-01, -4.34593883e-01, 8.17550753e-02, 1.67462383e-02, -1.75109111e-03, 3.82847738e-03
     return a + b*x**0.2 + c*x**0.3 + d*x**0.8 + g*x**2+h*x**11+i*x**22+j*x**37
 
-@jit
+@jax.jit
 def get_para_scalar(trx):
-    a = fited_a(trx)
-    b = fited_b(trx)
-    c = fited_c(trx)
-    d = fited_p(trx)
-    e = fited_s(trx)
-    return a, b, c, d, e
+    # 使用jax.numpy来进行条件判断
+    a, b, c, p, s = jnp.where(trx == 0, 
+                                jnp.array([0.758150, 3.585676, 1.941042, 2.573823, 1.993227]), 
+                                jnp.stack([fited_a(trx), fited_b(trx), fited_c(trx), fited_p(trx), fited_s(trx)]))
+    return a, b, c, p, s
 
 get_para = vmap(get_para_scalar)
 
