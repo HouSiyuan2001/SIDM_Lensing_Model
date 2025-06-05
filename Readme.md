@@ -10,6 +10,9 @@ This code implements a **parametric model for gravitational lensing** by self-in
 
 # File structure
 
+- **simpleNP**
+  - `simpleNP/run.py`: A simple NumPy-based example for creating critical curves and caustics, as illustrated on this page. This example only depends on the `simpleNP/parametricLensing.py` file located in the same folder. Note that the rest of our package uses JAX to enhance computational efficiency.
+
 - **example**
   - `example/Lensing.ipynb`: This Jupyter notebook provides instructions for using the parametric lensing model, along with examples of lensing-related maps, critical curves, and caustics. An example of the outcome is illustrated on this page.
   - `example/Accuracy.ipynb`: This Jupyter notebook computes the density and lensing-related profiles, comparing the model's predicted results with those obtained numerically.
