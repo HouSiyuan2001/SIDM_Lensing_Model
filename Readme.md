@@ -54,6 +54,15 @@ $\rho_{s,0}$:  $\rm h^2 M_\odot/Mpc^3$
 
 ---
 
+# Note on Eq. (3.10)
+
+⚠️ **Typo in the published paper**:  
+In Eq. (3.10), the term with -721.8 was incorrectly typeset in the previous version (v2) and in the published JCAP version as an exponent ($\tau^{0.8}$).
+The correct form should be a multiplication factor ($0.8 \times \tau$). Our released code has always implemented the correct expression, so all results and conclusions in the paper remain valid. For verification, see [Accuracy.ipynb](./example/Accuracy.ipynb).
+
+We thank Wolfgang Enzi for pointing this out.
+
+---
 # References
 
 Our code is free to copy and modify. If you find it useful, please cite the following papers. For any questions or comments, feel free to contact [syhou_at_pmo.ac.cn].
