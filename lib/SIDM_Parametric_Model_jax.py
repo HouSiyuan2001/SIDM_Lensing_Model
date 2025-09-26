@@ -55,9 +55,15 @@ class SIDM_parametric_simple(object):
         return a + b * x + c * x**2 + d * x**3 + g * x**4 + 1 / (np.log(0.001)) * (1 - a) * np.log(x**h + 0.001) + A * (np.arctan(B * (x + C)) - np.arctan(B * C))
 
     def fitted_rhos(self, x):
-        '''Calculate the fitted rho coefficient.'''
-        a, b, c, d, g, h, i = -1.54891697e+01, 7.22099942e+00, 1.77835229e+01, -7.21790903e+02, 5.64041228e+02, -4.52714226e-01, -1.24201628e+00
-        return np.exp(a * pow(x, 0.3) + b * x**0.2 + c * x**0.7 + d * x*0.8 + g * x + h * x**6 + i * x**12)
+        """Calculate the fitted rho coefficient. Eq. (3.10) in the published paper contains a typo"""
+        return np.exp(
+            -15.4891697 * x**0.3 +
+            7.22099942 * x**0.2 +
+            17.7835229  * x**0.7 +
+            -13.3914944 * x +
+            -0.452714226 * x**6 +
+            -1.24201628 * x**12
+        )
 
     def fitted_rs(self, x):
         '''Calculate the fitted rs coefficient.'''
